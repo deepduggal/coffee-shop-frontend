@@ -5,8 +5,10 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    const storedCartItems = localStorage.getItem("cartItems") ?? [];
-    return storedCartItems ? JSON.parse(storedCartItems) : [];
+    if (typeof window !== "undefined") {
+      const storedCartItems = localStorage.getItem("cartItems") ?? [];
+      return storedCartItems ? JSON.parse(storedCartItems) : [];
+    }
   });
   
   const addToCart = (productToAdd) => {
