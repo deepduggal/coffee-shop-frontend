@@ -1,113 +1,139 @@
+'use client';
+
 import Image from "next/image";
+import Products from "./components/Products";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { useEffect, useState } from "react";
+import { login } from "./api-client/auth";
+import { getProducts } from "./api-client/products";
+import { CartProvider } from "./data/providers/Cart";
+import Cart from "./components/Cart";
+
+const productsMockData = [
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719758064/samples/ecommerce/analog-classic.jpg",
+      "_id": "667629c38fd2c23ee9f02fd2",
+      "name": "Iconic Watch",
+      "description": "A classic-looking watch featuring a leather strap. Say luxurious in a thousand words.",
+      "price": 2.99,
+      "category": "watches",
+      "stock": 100,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719758068/samples/people/smiling-man.jpg",
+      "_id": "66762f3bf23ed223d9558307",
+      "name": "Smiling Man",
+      "description": "Faces have a unique effect on the human brain. Why not an image of a smiling man.",
+      "price": 1.99,
+      "category": "people",
+      "stock": 100,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719758069/samples/ecommerce/shoes.png",
+      "_id": "6684302229763063d401295e",
+      "name": "Purple Sneakers",
+      "description": "A no background image of purple sneakers. Lace up!",
+      "price": 1.99,
+      "category": "shoes",
+      "stock": 100,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719758084/samples/food/spices.jpg",
+      "_id": "6684307029763063d4012960",
+      "name": "Spices",
+      "description": "Colorul, evocative, and culturally-significant, a set of spices provides an incomparable presence to your brand.",
+      "price": 12.99,
+      "category": "food",
+      "stock": 1.99,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719758104/samples/shoe.jpg",
+      "_id": "668431f4859b3b44362b7350",
+      "name": "Women's Sneaker",
+      "description": "A feminine white, orange, and pink sneaker on a light pink background.",
+      "price": 1,
+      "category": "shoes",
+      "stock": 1,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719758115/cld-sample-5.jpg",
+      "_id": "66843293375c63dd6e3cb15c",
+      "name": "White Sneaker",
+      "description": "A sneaker with a light blue background.",
+      "price": 1,
+      "category": "shoes",
+      "stock": 100,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719940884/coffee-shop/ic81ekxqnp4ctgnkpihw.png",
+      "_id": "66843714c9497b2dedce9b7f",
+      "name": "Super User",
+      "description": "A productive, growth-oriented computer user. Charts symbolize value and gain. Can be used as a website image.",
+      "price": 9.99,
+      "category": "mugs",
+      "stock": 100,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719972723/coffee-shop/yk2utw5aidejuve4epck.png",
+      "_id": "6684b3735a2a2976bbb93344",
+      "name": "D Logo",
+      "description": "A tasteful logo of the letter D. The green and blue colors are associated with wisdom and trust. The gradient is trending.",
+      "price": 5,
+      "category": "logos",
+      "stock": 91,
+      "__v": 0
+  },
+  {
+      "imageUrl": "https://res.cloudinary.com/dccqa1l3v/image/upload/v1719973687/coffee-shop/v0h9vva4idf8lsnir2ty.png",
+      "_id": "6684b7379e0823fb7e1215e6",
+      "name": "D Logo",
+      "description": "A tasteful logo of the letter D. The green and blue colors are associated with wisdom and trust. The gradient is trending.",
+      "price": 5,
+      "category": "logos",
+      "stock": 91,
+      "__v": 0
+  }
+];
 
 export default function Home() {
+  const [products, setProducts] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    login()
+    .then((data) => {
+      const {user, token} = data;
+      setisLoading(true);
+      return getProducts(token)
+    })
+    .then((productData) => {
+      setProducts(productData.products);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => setisLoading(false));
+  }, []);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <>
+      <Header/>
+      <CartProvider>
+        <main className="flex flex-col min-h-screen pt-2 pb-24 px-12 md:px-24">
+          <Cart/>
+          {isLoading && <p>Loading...</p>}
+          {!isLoading && products && <Products data={products}/>}
+        </main>
+      </CartProvider>
+      <Footer/>
+    </>
   );
 }

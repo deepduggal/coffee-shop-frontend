@@ -1,3 +1,14 @@
+# Docs
+A front-end for an e-commerce website with cart and checkout functionality. The back-end is in a separate repo, deployed, and consumed by this front-end.
+
+## Routes
+ - / - View and purchase products
+ - /products/[id] - View a product's details
+ - /checkout - A checkout page where user's can enter info for the purchase.
+
+
+===================
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
