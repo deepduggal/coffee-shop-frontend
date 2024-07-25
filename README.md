@@ -1,13 +1,19 @@
 # Docs
 A front-end for an e-commerce website with cart and checkout functionality. The back-end is in a separate repo, deployed, and consumed by this front-end.
 
+## Functionality
+1. **Product Display**: A product display page that fetches product data from a MongoDB database via an Express API. The product images are stored in Cloudinary.
+2. **Shopping Cart**: A shopping cart where users can add, modify, or remove products.
+3. **Checkout System**: A checkout system that simulates transaction processes.
+
 ## Routes
- - / - View and purchase products
- - /products/[id] - View a product's details
- - /checkout - A checkout page where user's can enter info for the purchase.
+ - ```/``` - View and purchase products
+ - ```/products/[id]``` - View a product's details
+ - ```/checkout``` - A checkout page where user's can enter info for the purchase. Since this is a demo project, checking out just validates form fields, gives you a fresh cart, and redirects to the shop page.
 
 
-===================
+===============================
+===============================
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
