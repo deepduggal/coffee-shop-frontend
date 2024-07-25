@@ -1,26 +1,30 @@
 'use client';
-import Link from "next/link";
 
+import Link from "next/link";
 import { useContext, useState } from "react"
 import { CartContext } from "../data/providers/Cart"
+import { usePathname } from "next/navigation";
 
 function Cart() {
   const [cartToggled, setCartToggled] = useState(false);
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } = useContext(CartContext);
+  const pathname = usePathname();
 
-  const isCheckoutPage = () => window.location.pathname === '/checkout' 
+  const isCheckoutPage = () => {
+    return pathname === '/checkout'
+  };
   const toggleCart = () => setCartToggled(!cartToggled);
 
   return (
     <div className="relative bg-neutral-200 p-4">
       {/* <button className='absolute right-4 p-2 bg-neutral-300 hover:bg-neutral-400 rounded-sm' onClick={toggleCart}>X</button> */}
       <h1 className="text-2xl">Cart</h1>
-      {cartItems?.length === 0 ? (
+      {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <>
           <ul>
-            {cartItems?.map((item) => {
+            {cartItems.map((item) => {
               const {product, qty} = item;
               
               return (
@@ -36,13 +40,8 @@ function Cart() {
               )
             })}
           </ul>
-          {cartItems && (
-            <>
-              <p className="font-bold">Total: ${getCartTotal().toFixed(2)}</p>
-              <button className='underline' onClick={clearCart}>Empty the cart?</button>
-            </>
-              
-          )}
+          <p className="font-bold">Total: ${getCartTotal().toFixed(2)}</p>
+          <button className='underline' onClick={clearCart}>Empty the cart?</button>
           <div className='pt-6'>
             {!isCheckoutPage() && <Link href={'/checkout'} className='float-right inline-block rounded-md text-neutral-100 bg-blue-400 hover:bg-blue-500 p-2'>Checkout</Link>}
           </div>

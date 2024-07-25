@@ -1,15 +1,11 @@
 'use client';
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect, useRef } from 'react'
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    if (typeof window !== "undefined") {
-      const storedCartItems = localStorage.getItem("cartItems");
-      return storedCartItems ? JSON.parse(storedCartItems) : [];
-    }
-  });
+  const [cartItems, setCartItems] = useState([]);
+  const isInitialRender = useRef(true);
   
   const addToCart = (productToAdd) => {
     const isItemInCart = cartItems.find((cartItem) => cartItem.product._id === productToAdd._id);
@@ -55,7 +51,7 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // console.log('load')
+    console.log('load', localStorage.getItem("cartItems"))
     const storedCartItems = localStorage.getItem("cartItems");
     if (storedCartItems) {
       setCartItems(JSON.parse(storedCartItems));
@@ -63,7 +59,13 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // console.log('save')
+    console.log('save', cartItems)
+
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 

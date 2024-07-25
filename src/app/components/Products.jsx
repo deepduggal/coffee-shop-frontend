@@ -11,7 +11,6 @@ const ProductOverviewCard = ({productData}) => {
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } = useContext(CartContext);
   const {_id, name, price, imageUrl, stock, description} = productData;
 
-  console.log(imageUrl);
   return (
     <div className='flex flex-col gap-2 justify-evenly'>
 
