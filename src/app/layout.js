@@ -20,6 +20,8 @@ import { EaselPlugin } from "gsap/EaselPlugin";
 import { PixiPlugin } from "gsap/PixiPlugin";
 import { TextPlugin } from "gsap/TextPlugin";
 import { CartProvider } from "./data/providers/Cart";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 gsap.registerPlugin(useGSAP,Flip,ScrollTrigger,Observer,ScrollToPlugin,Draggable,MotionPathPlugin,EaselPlugin,PixiPlugin,TextPlugin,RoughEase,ExpoScaleEase,SlowMo,CustomEase);
 
@@ -34,7 +36,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <CartProvider>
+          <Header/>
+          <main className="flex flex-col min-h-screen pt-2 pb-24 px-24">
+            {children}
+          </main>
+          <Footer/>
+        </CartProvider>
       </body>
     </html>
   );

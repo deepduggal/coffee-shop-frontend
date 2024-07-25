@@ -6,7 +6,7 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
     if (typeof window !== "undefined") {
-      const storedCartItems = localStorage.getItem("cartItems") ?? [];
+      const storedCartItems = localStorage.getItem("cartItems");
       return storedCartItems ? JSON.parse(storedCartItems) : [];
     }
   });

@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import Products from "./components/Products";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -108,10 +107,11 @@ export default function Home() {
   const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
+    setisLoading(true);
+    
     login()
     .then((data) => {
       const {user, token} = data;
-      setisLoading(true);
       return getProducts(token)
     })
     .then((productData) => {
@@ -125,15 +125,9 @@ export default function Home() {
 
   return (
     <>
-      <Header/>
-      <CartProvider>
-        <main className="flex flex-col min-h-screen pt-2 pb-24 px-12 md:px-24">
-          <Cart/>
-          {isLoading && <p>Loading...</p>}
-          {!isLoading && products && <Products data={products}/>}
-        </main>
-      </CartProvider>
-      <Footer/>
+      <Cart/>
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && products && <Products data={products}/>}
     </>
   );
 }
